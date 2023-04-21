@@ -2,11 +2,8 @@
 
 ## Student details
 
-- Full Name: **FILL IN**
-- Student ID: **FILL IN**
+- Full Name: **Yung-En Chi**
+- Student ID: **s3864916**
 
 ## The rest of your README goes here
 
-Remember to use headings and sub-headings as appropriate.
-
-Good luck! :-)
