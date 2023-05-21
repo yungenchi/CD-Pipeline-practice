@@ -5,14 +5,14 @@
   become: yes # sudo
 
   tasks:
-  - name: Install nginx
-    ansible.builtin.apt:
-      name: nginx
-      state: present
-  - name: Upload content to web site
-    copy:
-      content: yah hello from ansible
-      dest: /var/www/html/index.html
+  # - name: Install nginx
+  #   ansible.builtin.apt:
+  #     name: nginx
+  #     state: present
+  # - name: Upload content to web site
+  #   copy:
+  #     content: yah hello from ansible
+  #     dest: /var/www/html/index.html
 
   - name: Install required system packages for Docker
     apt:
@@ -42,3 +42,18 @@
       name: docker-ce
       state: latest
       update_cache: true
+  
+  - name: Run Docker container
+    docker_container:
+      name: foo_app
+      image: patrmitacr.azurecr.io/assignment2app:1.0.0
+      add_host: "host.docker.internal:host-gateway"
+      env:
+        PORT: 3001
+        DB_HOSTNAME: "host.docker.internal"
+        DB_PORT: 5432
+        DB_USERNAME: "pete"
+        DB_PASSWORD: "devops"
+      ports:
+        - "0.0.0.0:80:3001"
+      detach: yes
