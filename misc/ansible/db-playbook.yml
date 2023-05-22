@@ -7,7 +7,7 @@
   tasks:
   - name: Install required system packages for Docker
     apt:
-      pkg:
+      pkg: 
         - apt-transport-https
         - ca-certificates
         - curl
@@ -34,6 +34,13 @@
       state: latest
       update_cache: true
 
+  - name: Copy SQL file to ec2
+    copy:
+      src: ../snapshot-prod-data.sql
+      dest: /tmp/snapshot-prod-data.sql
+      owner: ubuntu
+      group: ubuntu
+
   - name: Create & run database container
     community.docker.docker_container:
       name: "foo_db"
@@ -43,10 +50,8 @@
         POSTGRES_USER=pete
         POSTGRES_DB=foo
       published_ports:
-      - "0.0.0.0:5432:5432"
+        - "0.0.0.0:5432:5432"
       volumes:
-      - /init.sql:/docker-entrypoint-initdb.d/init.sh
-
-  
-  # - name: Copy file into existing container at path
-  #   shell: docker cp init.sql foo_db:/docker-entrypoint-initdb.d/init.sql
+        - "/tmp/snapshot-prod-data.sql:/docker-entrypoint-initdb.d/init.sql"
+      state: started
+      restart_policy: always
