@@ -22,3 +22,5 @@ ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
 echo "----------Use ansible to set-up app ec2 docker----------"
 # Use ansible to set-up app ec2 docker
 ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
+
+cd ..

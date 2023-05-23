@@ -55,3 +55,7 @@
         - "/tmp/snapshot-prod-data.sql:/docker-entrypoint-initdb.d/init.sql"
       state: started
       restart_policy: always
+  
+  - name: Run SQL script
+    shell: docker exec -it foo_db psql -U pete -d foo -f /docker-entrypoint-initdb.d/init.sql
+    register: result

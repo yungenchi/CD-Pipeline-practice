@@ -44,6 +44,10 @@ locals {
 resource "aws_instance" "servers" {
   for_each = local.vms
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
 
@@ -86,6 +90,14 @@ resource "aws_security_group" "vms" {
   egress {
     from_port   = 0
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # PostgreSQL out
+  egress {
+    from_port   = 0
+    to_port     =5432
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
