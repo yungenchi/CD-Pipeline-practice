@@ -34,15 +34,36 @@ resource "aws_key_pair" "admin" {
 }
 
 locals {
-  vms = {
-    app = {},
-    db  = {}
+  vms_app = {
+    app1 = {},
+    app2  = {}
+  }
+  vms_db = {
+    db  = {}  
   }
   allowed_cidrs_for_db = var.allow_all_ip_addresses_to_access_database_server ? ["0.0.0.0/0"] : ["${var.my_ip_address}/32"]
 }
 
-resource "aws_instance" "servers" {
-  for_each = local.vms
+resource "aws_instance" "apps" {
+  for_each = local.vms_app
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+
+  key_name        = aws_key_pair.admin.key_name
+  security_groups = [aws_security_group.vms.name]
+
+  tags = {
+    Name = "${each.key} server for A2"
+  }
+}
+
+resource "aws_instance" "db" {
+  for_each = local.vms_db
 
   lifecycle {
     create_before_destroy = true
@@ -103,8 +124,15 @@ resource "aws_security_group" "vms" {
   }
 }
 
-output "vm_public_addresses" {
-  value = { for role_name, vm in aws_instance.servers : role_name => {
+output "app_vm_public_addresses" {
+  value = { for role_name, vm in aws_instance.apps : role_name => {
+    public_hostname   = vm.public_dns,
+    public_ip_address = vm.public_ip
+    }
+  }
+}
+output "db_vm_public_addresses" {
+  value = { for role_name, vm in aws_instance.db : role_name => {
     public_hostname   = vm.public_dns,
     public_ip_address = vm.public_ip
     }
