@@ -13,6 +13,7 @@
 Here is a overall set up flow chart that represent the step of how application is auto deploy. The step is same as in the _set_up.sh_.
 By running _set_up.sh_ the steps of deployment will be automatically proceed.
 - There are in total three ec2 instance be set-up, two of them are for the app front-end server, one of them is for the. db server instance. Both the app and db server takes the approach of running the docker image on the instances to host the servers.
+- In the bash script _set_up.sh_, _ yes yes | _  is used to enter yes when running terraform for the yes/no question; _export ANSIBLE_HOST_KEY_CHECKING=False_ avoids the yes/no question to a new fingerprint host.
 
 
 ## Creation & set-up of servers (Terraform)
@@ -47,3 +48,21 @@ Above is the relation graph of the set up of load balancer.
 When user enter the DNS name/ip address of the load blancer (eg. http://a2-front-1509149884.us-east-1.elb.amazonaws.com), the listener of the load balancer will forward to the taget group (ie. a2-front). The taget group have two attachment ec2 instance, so the access is going to be forward to one of the instance.
 
 
+## Running docker on servers (Ansible)
+I use anisble to configure the environment on app and db instances. We first configure the require environment on the instance, and then run the docker image as hosting the app and db.
+
+#### IP address record (inventory.yml)
+use _get_public_ips.sh_ to get the ip address of the two app instance and the db instance, use it as:
+```
+cat ${tf-state-file} | bash get_public_ips.sh
+```
+The result will be store in yml format inventory for ansible to use later on as _inventory.yml_
+
+#### APP playbook
+The play book is use to configure the environment for runnning the docker image at _patrmitacr.azurecr.io/assignment2app:1.0.0_
+When starting up the app, we specify the DB_HOSTNAME to the ip address of db instance's ip address, and port to 5432 for accessing the postgreSQL port.
+
+#### DB playbook
+The play book is use to configure the environment for runnning the docker image for _postgres:14.7_
+Before run the postgre docker, we copy the init sql file to the ec2 instance at _/tmp/snapshot-prod-data.sql_, so when start the postgre docker, we mount the _/tmp/snapshot-prod-data.sql_ to _/docker-entrypoint-initdb.d/init.sql_, which will be run for initialize the db data.
+And finally, to ensure that the init sql is run, we use_ docker exec_ command to run the sql file again in the docker container. 
