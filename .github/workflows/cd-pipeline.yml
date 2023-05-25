@@ -19,6 +19,7 @@ jobs:
       - name: APT update
         run: sudo apt update
 
+# Install (awscli, terraform, ansible, docker)
       - name: Install awscli
         run: sudo apt install awscli
       - name: Check awscli
@@ -53,6 +54,7 @@ jobs:
       - name: Check Docker
         run: docker --version
 
+# Copy AWS Credentials to ~/.aws/credentials 
       - name: AWS Credentials set up
         run: |
           mkdir ~/.aws
