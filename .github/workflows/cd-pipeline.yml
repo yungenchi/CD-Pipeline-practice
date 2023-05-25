@@ -1,0 +1,24 @@
+name: Foo App CD Pipeline
+
+
+on:
+  push:
+    branches:
+      - main
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+      steps:        
+        - name: Checkout code
+          uses: actions/checkout@v3
+  
+  ansible:
+    runs-on: ubuntu-latest
+    steps:        
+      - name: Checkout code
+        uses: actions/checkout@v3
