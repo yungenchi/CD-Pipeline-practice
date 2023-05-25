@@ -36,7 +36,7 @@
 
   - name: Copy SQL file to ec2
     copy:
-      src: ../snapshot-prod-data.sql
+      src: snapshot-prod-data.sql
       dest: /tmp/snapshot-prod-data.sql
       owner: ubuntu
       group: ubuntu

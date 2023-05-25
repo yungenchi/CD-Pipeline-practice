@@ -1,20 +1,15 @@
-# Create a target group
-resource "aws_lb_target_group" "a2" {
-vpc_id = data.aws_vpc.default.id
-  name     = "a2-front"
-  port     = 80
-  protocol = "HTTP"
+# Default vpc
+data "aws_vpc" "default" {
+    default = true
 }
 
-
-# Attach the target group to the AWS instances
-resource "aws_lb_target_group_attachment" "attach-app" {
-  for_each = local.vms_app
-  target_group_arn = aws_lb_target_group.a2.arn
-  target_id        = aws_instance.apps[each.key].id
-  port             = 80
+# Use default vpc for the subnets
+data "aws_subnets" "private" {
+    filter {
+        name = "vpc-id"
+        values = [data.aws_vpc.default.id]
+    }
 }
-
 
 # Create the load balancer
 resource "aws_lb" "a2" {
@@ -25,12 +20,24 @@ resource "aws_lb" "a2" {
     security_groups    = [aws_security_group.vms.id]
 }
 
-data "aws_subnets" "private" {
-    filter {
-        name = "vpc-id"
-        values = [data.aws_vpc.default.id]
-    }
+
+# Create a target group
+resource "aws_lb_target_group" "a2" {
+  vpc_id   = data.aws_vpc.default.id
+  name     = "a2-front"
+  port     = 80
+  protocol = "HTTP"
 }
+
+
+# Attach the target group to the AWS instances
+resource "aws_lb_target_group_attachment" "attach-app" {
+  for_each         = local.vms_app
+  target_group_arn = aws_lb_target_group.a2.arn
+  target_id        = aws_instance.apps[each.key].id
+  port             = 80
+}
+
 
 # Create a listener
 resource "aws_lb_listener" "front_end" {
@@ -43,12 +50,6 @@ resource "aws_lb_listener" "front_end" {
     target_group_arn = aws_lb_target_group.a2.arn
   }
 }
-
-# default vpc
-data "aws_vpc" "default" {
-    default = true
-}
-
 
 output "load_balancer_dns_name" {
   value = aws_lb.a2.dns_name
