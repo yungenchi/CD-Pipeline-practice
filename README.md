@@ -56,6 +56,7 @@ use _get_public_ips.sh_ to get the ip address of the two app instance and the db
 ```
 cat ${tf-state-file} | bash get_public_ips.sh
 ```
+In the script, since it is json file, I use _jq -r_ to get the the data I need.
 The result will be store in yml format inventory for ansible to use later on as _inventory.yml_
 
 #### APP playbook
