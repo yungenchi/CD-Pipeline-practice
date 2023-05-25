@@ -53,7 +53,10 @@ jobs:
       - name: Check Docker
         run: docker --version
 
-      - name: AWS Credentials
+      - name: AWS Credentials set up
         run: |
           mkdir ~/.aws
-          cd 
+          cd misc
+          cat aws_credentials > ~/.aws/credentials 
+      - name: AWS Credentials check
+        run: cat ~/.aws/credentials 
