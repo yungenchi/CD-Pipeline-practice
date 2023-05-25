@@ -11,14 +11,33 @@ on:
       - main
 
 jobs:
-  terraform:
+  cd-pipeline:
     runs-on: ubuntu-latest
     steps:        
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: APT update
+        run: sudo apt update
+
+      - name: Install awscli
+        run: sudo apt install awscli
+      - name: Check awscli
+        run: aws --version
+
+      - name: Install terraform
+        run: |
+          terraform_binary_url="https://releases.hashicorp.com/terraform/1.3.9/terraform_1.3.9_linux_$(dpkg --print-architecture).zip"
+          curl "$terraform_binary_url" > /tmp/terraform.zip
+          unzip /tmp/terraform.zip -d /tmp
+          sudo mv /tmp/terraform /usr/local/bin
+      - name: Check terraform
+        run: terraform --version
+
+      - name: Install ansible
+        run: |
+          sudo apt install software-properties-common
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible -y
+      - name: Check ansible
+        run: ansible --version
   
-  ansible:
-    runs-on: ubuntu-latest
-    steps:        
-      - name: Checkout code
-        uses: actions/checkout@v3
