@@ -66,25 +66,30 @@ jobs:
       - name: AWS Credentials check
         run: cat ~/.aws/credentials 
 
-# Terraform 
-      - name: Terraform  - ec2 instance create
-        run: | 
-          cd infra
-          yes yes | terraform apply
-          cd ..
-
-# Ansible
-      - name: Ansible - Create the inventory.yml with ip_address
+      - name: test dir
         run: |
-          cd ansible
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          cat ../infra/terraform.tfstate | bash get_public_ips.sh
-      - name: Ansible - Set-up db ec2 docker
-        run: ansible-playbook db-playbook.yml -i inventory.yml --private-key ../tf_key
-      - name: Ansible - Set-up app ec2 dockers
-        run: ansible-playbook app-playbook.yml -i inventory.yml --private-key ../tf_key
-      - name: Ansible - cd back to root directory
-        run: cd ..
+          pwd
+          ls -al
+          
+# # Terraform 
+#       - name: Terraform  - ec2 instance create
+#         run: | 
+#           cd infra
+#           yes yes | terraform apply
+#           cd ..
+
+# # Ansible
+#       - name: Ansible - Create the inventory.yml with ip_address
+#         run: |
+#           cd ansible
+#           export ANSIBLE_HOST_KEY_CHECKING=False
+#           cat ../infra/terraform.tfstate | bash get_public_ips.sh
+#       - name: Ansible - Set-up db ec2 docker
+#         run: ansible-playbook db-playbook.yml -i inventory.yml --private-key ../tf_key
+#       - name: Ansible - Set-up app ec2 dockers
+#         run: ansible-playbook app-playbook.yml -i inventory.yml --private-key ../tf_key
+#       - name: Ansible - cd back to root directory
+#         run: cd ..
 
 
 
