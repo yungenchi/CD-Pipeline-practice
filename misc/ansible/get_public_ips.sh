@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script need to be run when you are in ansible folder
+
 # Read the JSON data from standard input
 json_data=$(cat)
 
@@ -7,6 +9,8 @@ json_data=$(cat)
 app1_ip=$(echo "$json_data" | jq -r '.outputs.app_vm_public_addresses.value.app1.public_ip_address')
 app2_ip=$(echo "$json_data" | jq -r '.outputs.app_vm_public_addresses.value.app2.public_ip_address')
 db_ip=$(echo "$json_data" | jq -r '.outputs.db_vm_public_addresses.value.db.public_ip_address')
+front_ip=$(echo "$json_data" | jq -r '.outputs.load_balancer_dns_name.value')
+
 
 # Write the IP addresses to the desired format
 cat <<EOF > inventory.yml
@@ -20,6 +24,11 @@ db_servers:
   hosts:
     db1:
       ansible_host: $db_ip
+EOF
+
+# Write the IP addresses to the desired format
+cat <<EOF > ../../a2_front
+$front_ip
 EOF
 
 
