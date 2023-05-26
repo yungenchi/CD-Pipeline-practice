@@ -35,6 +35,9 @@
       state: latest
       update_cache: true
 
+  - name: Remove previous docker
+    shell: sudo docker rm -f foo_app
+
   - name: run app container
     community.docker.docker_container:
       name: "foo_app"

@@ -47,24 +47,6 @@ locals {
 resource "aws_instance" "apps" {
   for_each = local.vms_app
 
-  # lifecycle {
-  #   create_before_destroy = true
-  # }
-
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
-
-  key_name        = aws_key_pair.admin.key_name
-  security_groups = [aws_security_group.vms.name]
-
-  tags = {
-    Name = "${each.key} server for A2"
-  }
-}
-
-resource "aws_instance" "db" {
-  for_each = local.vms_db
-
   lifecycle {
     create_before_destroy = true
   }
@@ -80,8 +62,26 @@ resource "aws_instance" "db" {
   }
 }
 
+resource "aws_instance" "db" {
+  for_each = local.vms_db
+
+  # lifecycle {
+  #   create_before_destroy = true
+  # }
+
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+
+  key_name        = aws_key_pair.admin.key_name
+  security_groups = [aws_security_group.vms.name]
+
+  tags = {
+    Name = "${each.key} server for A2"
+  }
+}
+
 resource "aws_security_group" "vms" {
-  name = "vms_for_a2"
+  name = "a2"
 
   # SSH
   ingress {
