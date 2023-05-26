@@ -11,16 +11,17 @@ on:
       - main
 
 jobs:
-  check-deployed:
+  check-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      # - name: Check condition and skip actions
-      #   run: echo "Condition: ${{ github.event_name == 'pull_request' }}"    
+      - name: Check condition and skip actions
+        run: bash check_deploy.sh
 
 
   cd-pipeline:
+    needs: check-deploy
     runs-on: ubuntu-latest
     steps:  
       - name: Checkout code
@@ -61,19 +62,12 @@ jobs:
       - name: AWS Credentials check
         run: cat ~/.aws/credentials 
 
-# Clean AWS 
-      - name: Clean AWS
-        run: |
-          cd misc
-          set +e
-          bash clean_aws.sh
-          set -e
 
 # Terraform 
       - name: Terraform  - ec2 instance create
         run: | 
-          cd infra
-          terraform init
+          ls
+          cd misc/infra
           yes yes | terraform apply
           cd ..
 
@@ -88,10 +82,4 @@ jobs:
       - name: Ansible - Set-up app ec2 dockers
         run: ansible-playbook app-playbook.yml -i inventory.yml --private-key ../tf_key
       - name: Ansible - cd back to root directory
-        run: cd ..
-
-
-
-
-
-      
+        run: cd ../..
