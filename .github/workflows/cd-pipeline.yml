@@ -70,6 +70,7 @@ jobs:
       - name: Terraform  - ec2 instance create
         run: | 
           cd misc/infra
+          terraform init
           yes yes | terraform apply
           cd ..
 
