@@ -65,9 +65,9 @@ resource "aws_instance" "apps" {
 resource "aws_instance" "db" {
   for_each = local.vms_db
 
-  lifecycle {
-    create_before_destroy = true
-  }
+  # lifecycle {
+  #   create_before_destroy = true
+  # }
 
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"

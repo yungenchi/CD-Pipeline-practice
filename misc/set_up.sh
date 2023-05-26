@@ -3,6 +3,9 @@
 # Update up aws credential
 cat aws_credentials > ~/.aws/credentials 
 
+# Clean aws 
+bash clean_aws.sh
+
 # Use terraform to create app and db ec2 instance
 echo "----------Use terraform to create app and db ec2 instance----------"
 cd infra

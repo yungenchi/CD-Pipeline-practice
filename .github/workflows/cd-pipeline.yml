@@ -66,10 +66,16 @@ jobs:
       - name: AWS Credentials check
         run: cat ~/.aws/credentials 
 
+# Clean AWS 
+      - name: Clean AWS
+        run: |
+          misc
+          bash clean_aws.sh
+
 # Terraform 
       - name: Terraform  - ec2 instance create
         run: | 
-          cd misc/infra
+          cd infra
           terraform init
           yes yes | terraform apply
           cd ..
