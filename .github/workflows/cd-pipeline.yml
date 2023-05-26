@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:  
 
-      - name: Check condition and skip actions
-        run: echo "Condition: ${{ github.event_name == 'pull_request' }}"    
+      # - name: Check condition and skip actions
+      #   run: echo "Condition: ${{ github.event_name == 'pull_request' }}"    
 
       - name: Checkout code
         uses: actions/checkout@v3
