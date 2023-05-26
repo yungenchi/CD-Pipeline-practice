@@ -13,7 +13,11 @@ on:
 jobs:
   cd-pipeline:
     runs-on: ubuntu-latest
-    steps:        
+    steps:  
+
+      - name: Check condition and skip actions
+        run: echo "Condition: ${{ github.event_name == 'pull_request' }}"    
+
       - name: Checkout code
         uses: actions/checkout@v3
       - name: APT update
@@ -58,7 +62,32 @@ jobs:
       - name: AWS Credentials set up
         run: |
           mkdir ~/.aws
-          cd misc
-          cat aws_credentials > ~/.aws/credentials 
+          cat misc/aws_credentials > ~/.aws/credentials 
       - name: AWS Credentials check
         run: cat ~/.aws/credentials 
+
+# Terraform 
+      - name: Terraform  - ec2 instance create
+        run: | 
+          cd infra
+          yes yes | terraform apply
+          cd ..
+
+# Ansible
+      - name: Ansible - Create the inventory.yml with ip_address
+        run: |
+          cd ansible
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          cat ../infra/terraform.tfstate | bash get_public_ips.sh
+      - name: Ansible - Set-up db ec2 docker
+        run: ansible-playbook db-playbook.yml -i inventory.yml --private-key ../tf_key
+      - name: Ansible - Set-up app ec2 dockers
+        run: ansible-playbook app-playbook.yml -i inventory.yml --private-key ../tf_key
+      - name: Ansible - cd back to root directory
+        run: cd ..
+
+
+
+
+
+      
