@@ -65,7 +65,9 @@ jobs:
       - name: Clean AWS
         run: |
           cd misc
+          set +e
           bash clean_aws.sh
+          set -e
 
 # Terraform 
       - name: Terraform  - ec2 instance create

@@ -81,7 +81,7 @@ resource "aws_instance" "db" {
 }
 
 resource "aws_security_group" "vms" {
-  name = "vms_for_a2"
+  name = "a2"
 
   # SSH
   ingress {

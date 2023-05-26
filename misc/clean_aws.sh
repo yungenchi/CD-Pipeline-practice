@@ -11,7 +11,7 @@ do
     echo "Instance Name: $name"
     echo "Instance ID: $instance_id"
 
-    aws ec2 terminate-instances --instance-ids "$instance_id"
+    aws ec2 terminate-instances --instance-ids "$instance_id" >> dump
 
     echo "Instance termination initiated."
     echo
@@ -37,13 +37,13 @@ echo
 
 
 # Delete Security Group
-security_group_name="vms_for_a2"
-delete_sg_output=$(aws ec2 delete-security-group --group-name "$security_group_name" 2>&1)
+security_group_name="a2"
+aws ec2 delete-security-group --group-name "$security_group_name"
 
 if [[ $? -eq 0 ]]; then
   echo "Security Group '$security_group_name' deleted successfully."
 else
-  echo "Failed to delete Security Group '$security_group_name'. Error message: $delete_sg_output"
+  echo "Failed to delete Security Group '$security_group_name'."
 fi
 
 echo
