@@ -96,8 +96,8 @@ jobs:
       - name: Ansible - Set-up db ec2 docker
         run: |
           cd misc/ansible
-          ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
+          ansible-playbook db-playbook.yml -i inventory.yml --private-key ../tf_key
       - name: Ansible - Set-up app ec2 dockers
         run:  |
           cd misc/ansible
-          ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
+          ansible-playbook app-playbook.yml -i inventory.yml --private-key ../tf_key
