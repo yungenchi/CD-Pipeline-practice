@@ -81,19 +81,20 @@ jobs:
       - name: Terraform  - ec2 instance create
         run: | 
           ls
-          cd infra
+          cd misc/infra
           yes yes | terraform apply
           bash get_ip.sh
-          cd ..
 
 # Ansible
       - name: Ansible - Create the inventory.yml with ip_address
         run: |
-          cd ansible
+          cd misc/ansible
           export ANSIBLE_HOST_KEY_CHECKING=False
       - name: Ansible - Set-up db ec2 docker
-        run: ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
+        run: |
+          cd misc/ansible
+          ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
       - name: Ansible - Set-up app ec2 dockers
-        run: ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
-      - name: Ansible - cd back to root directory
-        run: cd ../..
+        run:  |
+          cd misc/ansible
+          ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
