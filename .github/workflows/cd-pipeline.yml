@@ -94,10 +94,13 @@ jobs:
       - name: Ansible - switch off host key check
         run: |
           cd misc/ansible
+          export ANSIBLE_HOST_KEY_CHECKING=False
 
       - name: Ansible - Set-up db ec2 docker
         run: |
           cd misc/ansible
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          cat ../key
           ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ../key
         # run: |
         #   cd misc/ansible
