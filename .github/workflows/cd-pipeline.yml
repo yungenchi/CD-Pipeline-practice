@@ -37,7 +37,9 @@ jobs:
       - name: APT update
         run: sudo apt update
 
-# Install (awscli, terraform, ansible, docker)
+# Install (awscli, terraform, ansible, docker, python)
+      - name: Install python
+        run: sudo apt-get install python-minimal -y
       - name: Install awscli
         run: sudo apt install awscli
       - name: Install terraform
