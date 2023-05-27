@@ -71,12 +71,15 @@ jobs:
           cat misc/aws_credentials > ~/.aws/credentials 
 
 # Copy key pair to ~/.ssh/
-      - name: Key pair copy
+      - name: Key pair set up
         run: |
           cd misc 
           mkdir ~/.ssh
           cp tf_key ~/.ssh/tf_key
           cp tf_key.pub ~/.ssh/tf_key.pub
+          cd ~/.ssh
+          mkdir authorized_keys
+          cat tf_key.pub >> authorized_keys
 
 # Terraform 
       - name: Terraform  - ec2 instance create
