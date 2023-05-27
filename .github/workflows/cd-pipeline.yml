@@ -77,8 +77,6 @@ jobs:
           mkdir ~/.ssh
           cp tf_key ~/.ssh/tf_key
           cp tf_key.pub ~/.ssh/tf_key.pub
-          cat ~/.ssh/tf_key
-          cat ~/.ssh/tf_key.pub
 
 # Terraform 
       - name: Terraform  - ec2 instance create
@@ -96,8 +94,9 @@ jobs:
       - name: Ansible - Set-up db ec2 docker
         run: |
           cd misc/ansible
-          ansible-playbook db-playbook.yml -i inventory.yml --private-key ../tf_key
+          cat ~/.ssh/tf_key
+          ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
       - name: Ansible - Set-up app ec2 dockers
         run:  |
           cd misc/ansible
-          ansible-playbook app-playbook.yml -i inventory.yml --private-key ../tf_key
+          ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
