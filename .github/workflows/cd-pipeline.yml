@@ -101,14 +101,14 @@ jobs:
           cd misc/ansible
           export ANSIBLE_HOST_KEY_CHECKING=False
           cat ../key
-          ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ../key
+          ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ~/.ssh/key
         # run: |
         #   cd misc/ansible
         #   cat ~/.ssh/key
         #   ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/key
 
 
-      - name: Ansible - Set-up app ec2 dockers
-        run:  |
-          cd misc/ansible
-          ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/key
+      # - name: Ansible - Set-up app ec2 dockers
+      #   run:  |
+      #     cd misc/ansible
+      #     ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/key
