@@ -97,7 +97,9 @@ jobs:
           export ANSIBLE_HOST_KEY_CHECKING=False
 
       - name: Ansible - Set-up db ec2 docker
-        run: ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ~/.ssh/tf_key
+        run: |
+          cd misc/ansible
+          ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ~/.ssh/tf_key
         # run: |
         #   cd misc/ansible
         #   cat ~/.ssh/tf_key
