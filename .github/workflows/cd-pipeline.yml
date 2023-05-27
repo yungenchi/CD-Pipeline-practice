@@ -80,6 +80,7 @@ jobs:
       - name: Terraform  - ec2 instance create
         run: | 
           cd misc/infra
+          terraform state pull
           yes yes | terraform apply
           bash get_ip.sh
 
