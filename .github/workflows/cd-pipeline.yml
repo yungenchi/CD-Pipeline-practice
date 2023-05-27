@@ -78,7 +78,7 @@ jobs:
           cp tf_key ~/.ssh/tf_key
           cp tf_key.pub ~/.ssh/tf_key.pub
           cd ~/.ssh
-          cat tf_key.pub >> authorized_keys
+          cat tf_key.pub > authorized_keys
           
           
 
