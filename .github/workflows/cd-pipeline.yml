@@ -11,17 +11,17 @@ on:
       - main
 
 jobs:
-  check-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Check condition and skip actions
-        run: bash check_deploy.sh
+  # check-deploy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #     - name: Check condition and skip actions
+  #       run: bash check_deploy.sh
 
 
   cd-pipeline:
-    needs: check-deploy
+    # needs: check-deploy
     runs-on: ubuntu-latest
     steps:  
       - name: Checkout code
