@@ -71,6 +71,7 @@ jobs:
 # Copy key pair to ~/.ssh/
       - name: Key pair copy
         run: |
+          pwd
           cd misc 
           mkdir ~/.ssh
           cp tf_key ~/.ssh/tf_key
@@ -79,6 +80,7 @@ jobs:
 # Terraform 
       - name: Terraform  - ec2 instance create
         run: | 
+          pwd
           cd infra
           yes yes | terraform apply
           bash get_ip.sh
