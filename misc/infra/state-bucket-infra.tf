@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "devop-a2-s3864916"
+    bucket = "devop-s3864916"
     key = "global/s3/terraform.state"
     region = "us-east-1"
     dynamodb_table = "terraform_state_lock"
@@ -8,7 +8,7 @@ terraform {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "devop-a2-s3864916"
+  bucket = "devop-s3864916"
   acl    = "private"
 
   lifecycle {
