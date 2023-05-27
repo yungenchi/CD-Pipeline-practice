@@ -37,13 +37,10 @@
   - name: Remove previous docker
     shell: sudo docker rm -f foo_db
 
-  - name: Remove previous sql file or directory in the ec2 instance
-    shell: sudo rm -rf snapshot-prod-data.sql
-
   - name: Copy SQL file to ec2
     copy:
-      src: snapshot-prod-data.sql
-      dest: /tmp/snapshot-prod-data.sql
+      src: ./snapshot-prod-data.sql
+      dest: /tmp/.
       owner: ubuntu
       group: ubuntu
 
