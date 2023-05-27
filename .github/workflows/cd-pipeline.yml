@@ -99,7 +99,7 @@ jobs:
       - name: Ansible - Set-up db ec2 docker
         run: |
           cd misc/ansible
-          ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ~/.ssh/tf_key
+          ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ../tf_key
         # run: |
         #   cd misc/ansible
         #   cat ~/.ssh/tf_key
