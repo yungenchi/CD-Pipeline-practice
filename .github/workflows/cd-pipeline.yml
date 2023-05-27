@@ -80,7 +80,7 @@ jobs:
           cp tf_key.pub ~/.ssh/tf_key.pub
           cd ~/.ssh
           cat tf_key.pub > authorized_keys
-          chmod 700 ~/.ssh/tf_key
+          sudo chmod 700 ~/.ssh/tf_key
           
 
 # Terraform 
