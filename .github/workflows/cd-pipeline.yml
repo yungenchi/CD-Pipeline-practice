@@ -39,7 +39,7 @@ jobs:
 
 # Install (awscli, terraform, ansible, docker, python)
       - name: Install python
-        run: sudo apt-get install python-minimal -y
+        run: sudo apt install python3
       - name: Install awscli
         run: sudo apt install awscli
       - name: Install terraform
