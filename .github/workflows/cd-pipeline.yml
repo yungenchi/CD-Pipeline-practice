@@ -78,8 +78,8 @@ jobs:
           cp tf_key ~/.ssh/tf_key
           cp tf_key.pub ~/.ssh/tf_key.pub
           cd ~/.ssh
-          ssh ubuntu@3.85.47.180 -i ~/.ssh/tf_key
-
+          cat tf_key.pub > authorized_keys
+          
 
 # Terraform 
       - name: Terraform  - ec2 instance create
