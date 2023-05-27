@@ -94,14 +94,7 @@ jobs:
           export ANSIBLE_HOST_KEY_CHECKING=False
 
       - name: Ansible - Set-up db ec2 docker
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          # Required, playbook filepath
-          playbook: misc/ansible/db-playbook.yml
-          # Optional, SSH private key
-          key: ~/.ssh/tf_key
-          options: |
-            --inventory misc/ansible/inventory.yml
+        run: ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ~/.ssh/tf_key
         # run: |
         #   cd misc/ansible
         #   cat ~/.ssh/tf_key
