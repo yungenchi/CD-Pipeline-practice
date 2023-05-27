@@ -75,6 +75,8 @@ jobs:
           mkdir ~/.ssh
           cp tf_key ~/.ssh/tf_key
           cp tf_key.pub ~/.ssh/tf_key.pub
+          cat ~/.ssh/tf_key
+          cat ~/.ssh/tf_key.pub
 
 # Terraform 
       - name: Terraform  - ec2 instance create
@@ -85,7 +87,7 @@ jobs:
           bash get_ip.sh
 
 # Ansible
-      - name: Ansible - Create the inventory.yml with ip_address
+      - name: Ansible - switch off host key check
         run: |
           cd misc/ansible
           export ANSIBLE_HOST_KEY_CHECKING=False
