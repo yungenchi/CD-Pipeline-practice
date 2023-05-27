@@ -73,14 +73,10 @@ jobs:
 # Copy key pair to ~/.ssh/
       - name: Key pair set up
         run: |
-          ufw allow OpenSSH
           cd misc 
           mkdir ~/.ssh
           cp tf_key ~/.ssh/tf_key
           cp tf_key.pub ~/.ssh/tf_key.pub
-          cd ~/.ssh
-          cat tf_key.pub > authorized_keys
-          sudo chmod 700 ~/.ssh/tf_key
           
 
 # Terraform 
@@ -98,14 +94,20 @@ jobs:
           export ANSIBLE_HOST_KEY_CHECKING=False
 
       - name: Ansible - Set-up db ec2 docker
-        # - uses: ./.github/actions/ansible
-        # with: 
-        #   playbook: ./misc/ansible/db-playbook.yml
-        #   inventory: ./misc/ansible/inventory.yml
-        run: |
-          cd misc/ansible
-          cat ~/.ssh/tf_key
-          ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          # Required, playbook filepath
+          playbook: misc/ansible/db-playbook.yml
+          # Optional, SSH private key
+          key: ~/.ssh/tf_key
+          options: |
+            --inventory misc/ansible/inventory.yml
+        # run: |
+        #   cd misc/ansible
+        #   cat ~/.ssh/tf_key
+        #   ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
+
+
       - name: Ansible - Set-up app ec2 dockers
         run:  |
           cd misc/ansible
