@@ -59,16 +59,20 @@ jobs:
         run: |
           mkdir ~/.aws
           cat misc/aws_credentials > ~/.aws/credentials 
-      - name: AWS Credentials check
-        run: cat ~/.aws/credentials 
 
+# Copy key pair to ~/.ssh/
+      - name: Key pair copy
+        run: |
+          cd misc 
+          cp tf_key ~/.ssh/tf_key
+          cp tf_key.pub ~/.ssh/tf_key.pub
 
 # Terraform 
       - name: Terraform  - ec2 instance create
         run: | 
-          cd misc/infra
-          terraform init
+          cd infra
           yes yes | terraform apply
+          bash get_ip.sh
           cd ..
 
 # Ansible
@@ -76,10 +80,9 @@ jobs:
         run: |
           cd ansible
           export ANSIBLE_HOST_KEY_CHECKING=False
-          cat ../infra/terraform.tfstate | bash get_public_ips.sh
       - name: Ansible - Set-up db ec2 docker
-        run: ansible-playbook db-playbook.yml -i inventory.yml --private-key ../tf_key
+        run: ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
       - name: Ansible - Set-up app ec2 dockers
-        run: ansible-playbook app-playbook.yml -i inventory.yml --private-key ../tf_key
+        run: ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/tf_key
       - name: Ansible - cd back to root directory
         run: cd ../..
