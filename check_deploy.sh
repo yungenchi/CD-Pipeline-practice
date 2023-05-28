@@ -13,5 +13,5 @@ if echo "$response_app" | grep -q "Foo app" && echo "$response_db" | grep -q "Bi
   exit 0
 else
   echo "false"
-  exit 0
+  exit 1
 fi
