@@ -4,10 +4,11 @@
 url=$(cat a2_front)
 
 # Make the curl request and store the response in a variable
-response=$(curl -s "$url")
+response_app=$(curl -s "$url")
+response_db=$(curl -s "$url"/foos)
 
-# Check if the response contains the text "Foo app" and return true/false
-if echo "$response" | grep -q "Foo app"; then
+# Check if the response contains both "Foo app" and "Big Big Foo" and return true/false
+if echo "$response_app" | grep -q "Foo app" && echo "$response_db" | grep -q "Big Big Foo"; then
   echo "true"
   exit 0
 else

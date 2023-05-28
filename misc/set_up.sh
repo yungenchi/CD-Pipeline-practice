@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# Update up aws credential
+# Update aws credential
 cat aws_credentials > ~/.aws/credentials 
+
+# Update key pair
+cp key ~/.ssh/key
+cp key.pub ~/.ssh/key.pub
 
 # Use terraform to create app and db ec2 instance
 echo "----------Use terraform to create app and db ec2 instance----------"
 cd infra
+terraform init # For the backend terraform state
 yes yes | terraform apply
 # Update DNS and ip
+bash get_ip.sh
 cd ..
 
 echo "----------Disable host key checking to aviod answer yes to new connection----------"

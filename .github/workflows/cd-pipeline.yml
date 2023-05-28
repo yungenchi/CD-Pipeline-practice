@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      - '**'
+      
   pull_request:
     branches:
       - main
@@ -70,17 +70,17 @@ jobs:
           mkdir ~/.aws
           cat misc/aws_credentials > ~/.aws/credentials 
 
-# # Copy key pair to ~/.ssh/
-#       - name: Key pair set up
-#         run: |
-#           cd misc 
-#           mkdir ~/.ssh
-#           cp key ~/.ssh/key
-#           cp key.pub ~/.ssh/key.pub
-#           chmod 400 ~/.ssh/key
-#           chmod 400 key 
-#           cd ~/.ssh
-#           cat key.pub > authorized_keys
+# Copy key pair to ~/.ssh/
+      - name: Key pair set up
+        run: |
+          cd misc 
+          mkdir ~/.ssh
+          cp key ~/.ssh/key
+          cp key.pub ~/.ssh/key.pub
+          chmod 400 ~/.ssh/key
+          chmod 400 key 
+          cd ~/.ssh
+          cat key.pub > authorized_keys
           
           
 
@@ -93,23 +93,14 @@ jobs:
           bash get_ip.sh
 
 # Ansible
-      # - name: Ansible - switch off host key check
-      #   run: |
-      #     cd misc/ansible
-
       - name: Ansible - Set-up db ec2 docker
         run: |
           cd misc/ansible
-
-          chmod 400 ../key
-          ansible db_servers -m ping -i inventory.yml -u ubuntu --private-key ../key
-        # run: |
-        #   cd misc/ansible
-        #   cat ~/.ssh/key
-        #   ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/key
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook db-playbook.yml -i inventory.yml --private-key ~/.ssh/key
 
 
-      # - name: Ansible - Set-up app ec2 dockers
-      #   run:  |
-      #     cd misc/ansible
-      #     ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/key
+      - name: Ansible - Set-up app ec2 dockers
+        run:  |
+          cd misc/ansible
+          ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/key
