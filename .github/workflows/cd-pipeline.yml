@@ -20,16 +20,15 @@ jobs:
         run: |
           if bash check_deploy.sh; then
             echo "Deploy condition is true, skipping subsequent jobs"
-            echo "::set-output name=skip-deploy::true"
+            exit 1
           else
             echo "Deploy condition is false, proceeding with the CD pipeline"
-            echo "::set-output name=skip-deploy::false"
+            exit 0
           fi
 
 
   cd-pipeline:
     needs: check-deploy
-    if: needs.check-deploy.outputs.skip-deploy != 'true'
     runs-on: ubuntu-latest
     steps:  
       - name: Checkout code
