@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      
+
   pull_request:
     branches:
       - main
@@ -103,4 +103,5 @@ jobs:
       - name: Ansible - Set-up app ec2 dockers
         run:  |
           cd misc/ansible
+          export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook app-playbook.yml -i inventory.yml --private-key ~/.ssh/key
