@@ -1,5 +1,3 @@
-# COSC2759 Assignment 2
-
 ## Overall Set-Up
 - Set-up flow chart:
 ![Flow Diagram](img/flow.jpg)
